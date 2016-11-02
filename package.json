@@ -1,0 +1,29 @@
+{
+    "name": "trakt.tv-ondeck",
+    "version": "0.0.0",
+    "description": "Plugin to get images, extends trakt.tv module",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/vankasteelj/trakt.tv-images"
+    },
+    "keywords": [
+        "trakt.tv",
+        "trakt",
+        "tv",
+        "plugin",
+        "addon",
+        "images"
+    ],
+    "contributors": {
+        "name": "vankasteelj"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/vankasteelj/trakt.tv-images/issues"
+    },
+    "dependencies": {
+        "omdbapi": "1.x.x",
+        "fanart.tv": "1.x.x"
+    }
+}

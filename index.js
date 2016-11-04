@@ -1,6 +1,6 @@
 var Images = module.exports = {}; // Skeleton
 var Trakt; // the main API for trakt (npm: 'trakt.tv')
-var got = require('got'); // provided by 3rd party modules
+var got = require('got');
 var Omdb = require('omdbapi');
 var fanart = require('fanart.tv');
 var Fanart = false;
@@ -8,7 +8,7 @@ var TmdbApiKey = false;
 var TvdbApiKey = false;
 
 // Initialize the module
-Images.init = function (trakt) {
+Images.init = function(trakt) {
     Trakt = trakt;
     if (Trakt._extras.fanartApiKey) Fanart = new fanart(Trakt._extras.fanartApiKey);
     if (Trakt._extras.tmdbApiKey) TmdbApiKey = Trakt._extras.tmdbApiKey;
@@ -22,18 +22,18 @@ Images.init = function (trakt) {
             body: JSON.stringify({
                 apikey: Trakt._extras.tvdbApiKey
             })
-        }).then(function (res) {
+        }).then(function(res) {
             if (res.body && res.body.token) {
                 TvdbApiKey = res.body.token;
                 //console.log('tvdb auth:', res.body); // DEBUG
             }
-        }).catch(function (err) {
+        }).catch(function(err) {
             //console.log('tvdb auth err', err); // DEBUG
         });
     };
 };
 
-var format = function (res) {
+var format = function(res) {
     var background = {
         priority: 0,
         url: null
@@ -63,15 +63,15 @@ var format = function (res) {
             poster.url = img.poster;
         }
     }
-    
+
     return {
         background: background.url,
         poster: poster.url
     };
 };
 
-var getFanart = function (id, type) {
-    return new Promise(function (resolve) {
+var getFanart = function(id, type) {
+    return new Promise(function(resolve) {
         if (!Fanart) {
             return resolve({
                 source: 'fanart',
@@ -80,7 +80,7 @@ var getFanart = function (id, type) {
         }
 
         var fanartCat = type === 'movie' ? 'movies' : 'shows';
-        return Fanart[fanartCat].get(id).then(function (images) {
+        return Fanart[fanartCat].get(id).then(function(images) {
             //console.log('got from fanart:', images); // DEBUG
 
             // build output
@@ -93,7 +93,7 @@ var getFanart = function (id, type) {
                     images.moviethumb ? images.moviethumb[0].url : null;
             } else {
                 poster = images.tvposter ? images.tvposter[0].url : null;
-                background = images.showbackground ? images.showbackground[0].url : 
+                background = images.showbackground ? images.showbackground[0].url :
                     images.hdclearart ? images.hdclearart[0].url :
                     images.clearart ? images.clearart[0].url :
                     images.tvthumb ? images.tvthumb[0].url : null;
@@ -109,7 +109,7 @@ var getFanart = function (id, type) {
                 source: 'fanart',
                 img: obj
             });
-        }).catch(function (err) {
+        }).catch(function(err) {
             return resolve({
                 source: 'fanart',
                 img: null
@@ -118,13 +118,13 @@ var getFanart = function (id, type) {
     });
 };
 
-var getOmdb = function (id, type) {
-    return new Promise(function (resolve) {
+var getOmdb = function(id, type) {
+    return new Promise(function(resolve) {
         var omdbCat = type === 'movie' ? 'movie' : type === 'show' ? 'series' : 'episode';
         return Omdb.get({
             id: id,
             type: omdbCat
-        }).then(function (images) {
+        }).then(function(images) {
             //console.log('got from omdb:', images); // DEBUG
 
             // build output
@@ -135,13 +135,13 @@ var getOmdb = function (id, type) {
                     background: null
                 };
             }
-            
+
             // return
             return resolve({
                 source: 'omdb',
                 img: obj
             });
-        }).catch(function (err) {
+        }).catch(function(err) {
             resolve({
                 source: 'omdb',
                 img: null
@@ -150,8 +150,8 @@ var getOmdb = function (id, type) {
     });
 };
 
-var getTmdb = function (id) {
-    return new Promise(function (resolve) {
+var getTmdb = function(id) {
+    return new Promise(function(resolve) {
         if (!TmdbApiKey) {
             return resolve({
                 source: 'tmdb',
@@ -166,7 +166,7 @@ var getTmdb = function (id) {
                 'content-type': 'application/json'
             },
             timeout: 1000
-        }).then(function (res) {
+        }).then(function(res) {
             var url = 'https://image.tmdb.org/t/p/';
             var bsize = 'original'; // or w1280
             var psize = 'original'; // or w780
@@ -197,7 +197,7 @@ var getTmdb = function (id) {
                 source: 'tmdb',
                 img: built
             });
-        }).catch(function (error) {
+        }).catch(function(error) {
             //console.log('ERROR TMDB', error)
             return resolve({
                 source: 'tmdb',
@@ -207,8 +207,8 @@ var getTmdb = function (id) {
     });
 };
 
-var getTvdb = function (id) {
-    return new Promise(function (resolve) {
+var getTvdb = function(id) {
+    return new Promise(function(resolve) {
         if (!TvdbApiKey) {
             return resolve({
                 source: 'tvdb',
@@ -226,25 +226,25 @@ var getTvdb = function (id) {
             }
         };
 
-        function tvCall (key, name) {
-            return new Promise(function (resol) {
+        function tvCall(key, name) {
+            return new Promise(function(resol) {
                 var ret = {};
                 ret[name] = null;
 
-                return got(url+'?keyType='+key, opts).then(function (res) {
+                return got(url + '?keyType=' + key, opts).then(function(res) {
                     var i = res.body;
                     if (i && i.data && i.data[0]) {
                         ret[name] = imbase + i.data[0].fileName;
                     }
                     return resol(ret);
-                }).catch(function (err) {
+                }).catch(function(err) {
                     return resol(ret);
                 });
             });
         };
 
         return Promise.all([tvCall('fanart', 'background'), tvCall('poster', 'poster')])
-            .then(function (responses) {
+            .then(function(responses) {
                 //console.log('got from tvdb', responses); // DEBUG
                 var obj = {};
                 obj[Object.keys(responses[0])[0]] = responses[0][Object.keys(responses[0])[0]];
@@ -253,7 +253,7 @@ var getTvdb = function (id) {
                     source: 'tvdb',
                     img: obj
                 });
-            }).catch(function (err) {
+            }).catch(function(err) {
                 return resolve({
                     source: 'tvdb',
                     img: null
@@ -262,11 +262,11 @@ var getTvdb = function (id) {
     });
 };
 
-Images.get = function (id, type) {
+Images.get = function(id, type) {
     return Trakt.search.id({
         id_type: id.indexOf('tt') !== -1 ? 'imdb' : 'tvdb',
         id: id
-    }).then(function (res) {
+    }).then(function(res) {
         //console.log('trakt response', res[0]) // DEBUG
         var imdb, tvdb, tmdb;
         if (res[0] && res[0].type === 'movie') {
@@ -274,10 +274,10 @@ Images.get = function (id, type) {
             tmdb = res[0].movie.ids.tmdb;
 
             return Promise.all([
-                getFanart(imdb, type), 
+                getFanart(imdb, type),
                 getOmdb(id, type),
                 getTmdb(id)
-            ]).then(function (obj) {
+            ]).then(function(obj) {
                 //console.log('format:', obj); // DEBUG
                 return format(obj);
             });
@@ -286,10 +286,10 @@ Images.get = function (id, type) {
             tvdb = res[0].show.ids.tvdb;
 
             return Promise.all([
-                getFanart(tvdb, type), 
+                getFanart(tvdb, type),
                 getOmdb(imdb, type),
                 getTvdb(tvdb)
-            ]).then(function (obj) {
+            ]).then(function(obj) {
                 //console.log('format:', obj); // DEBUG
                 return format(obj);
             });

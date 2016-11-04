@@ -1,6 +1,6 @@
 {
-    "name": "trakt.tv-ondeck",
-    "version": "0.0.0",
+    "name": "trakt.tv-images",
+    "version": "0.0.1",
     "description": "Plugin to get images, extends trakt.tv module",
     "main": "index.js",
     "repository": {
@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "omdbapi": "1.x.x",
-        "fanart.tv": "1.x.x"
+        "fanart.tv": "1.x.x",
+        "got": "5.x.x"
     }
 }

@@ -32,30 +32,30 @@ NOTICE: requires trakt.tv module! Load this plugin directly through `trakt.tv` m
 ### Log in with trakt.tv, then call "images":
 ```js
 // Movie: terminator genesys
-trakt.images.get('tt1340138', 'movie')
+trakt.images.get('tt1340138')
     .then(console.log.bind(console))
     .catch(console.log.bind(console));
 
 // Show: Game of Thrones
-trakt.images.get('121361', 'show')
+trakt.images.get('121361')
     .then(console.log.bind(console))
     .catch(console.log.bind(console));
 
-trakt.images.get('tt0944947', 'show')
+trakt.images.get('tt0944947')
     .then(console.log.bind(console))
     .catch(console.log.bind(console));
 
 // Episode: Game of Thrones, s01e01
-trakt.images.get('3254641', 'episode')
+trakt.images.get('3254641')
     .then(console.log.bind(console))
     .catch(console.log.bind(console));
 
-trakt.images.get('tt1480055', 'episode')
+trakt.images.get('tt1480055')
     .then(console.log.bind(console))
     .catch(console.log.bind(console));
 ```
 
-Note: call is `trakt.images.get(id, type)` where `id` is from imdb (with mandatory 'tt' prefix!) or tvdb, and `type` is 'movie', 'show' or 'episode'.
+Note: call is `trakt.images.get(id)` where `id` is from **imdb** (with mandatory 'tt' prefix!) or **tvdb**.
 
 ### Example response
 ```js

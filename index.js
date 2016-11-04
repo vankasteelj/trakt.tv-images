@@ -25,11 +25,8 @@ Images.init = function(trakt) {
         }).then(function(res) {
             if (res.body && res.body.token) {
                 TvdbApiKey = res.body.token;
-                //console.log('tvdb auth:', res.body); // DEBUG
             }
-        }).catch(function(err) {
-            //console.log('tvdb auth err', err); // DEBUG
-        });
+        }).catch(function(err) {});
     };
 };
 
@@ -81,8 +78,6 @@ var getFanart = function(id, type) {
 
         var fanartCat = type === 'movie' ? 'movies' : 'shows';
         return Fanart[fanartCat].get(id).then(function(images) {
-            //console.log('got from fanart:', images); // DEBUG
-
             // build output
             var obj = null;
             var poster, background;
@@ -125,8 +120,6 @@ var getOmdb = function(id, type) {
             id: id,
             type: omdbCat
         }).then(function(images) {
-            //console.log('got from omdb:', images); // DEBUG
-
             // build output
             var obj = null;
             if (images.poster) {
@@ -173,7 +166,6 @@ var getTmdb = function(id) {
 
             var built = null;
             if (res.body) {
-                //console.log('got from tmdb:', res.body); // DEBUG
                 if (res.body.movie_results) {
                     if (res.body.movie_results[0]) {
                         built = {
@@ -189,8 +181,6 @@ var getTmdb = function(id) {
                         }
                     }
                 }
-            } else {
-                //console.log('NOPE')
             }
 
             return resolve({
@@ -198,7 +188,6 @@ var getTmdb = function(id) {
                 img: built
             });
         }).catch(function(error) {
-            //console.log('ERROR TMDB', error)
             return resolve({
                 source: 'tmdb',
                 img: null
@@ -245,7 +234,6 @@ var getTvdb = function(id) {
 
         return Promise.all([tvCall('fanart', 'background'), tvCall('poster', 'poster')])
             .then(function(responses) {
-                //console.log('got from tvdb', responses); // DEBUG
                 var obj = {};
                 obj[Object.keys(responses[0])[0]] = responses[0][Object.keys(responses[0])[0]];
                 obj[Object.keys(responses[1])[0]] = responses[1][Object.keys(responses[1])[0]];
@@ -262,14 +250,19 @@ var getTvdb = function(id) {
     });
 };
 
-Images.get = function(id, type) {
+Images.get = function(id) {
+    if (!id) {
+        throw new Error('An IMDB or TVDB id is mandatory.');
+    }
+
     return Trakt.search.id({
         id_type: id.indexOf('tt') !== -1 ? 'imdb' : 'tvdb',
         id: id
     }).then(function(res) {
-        //console.log('trakt response', res[0]) // DEBUG
-        var imdb, tvdb, tmdb;
+        var imdb, tvdb, tmdb, type;
+
         if (res[0] && res[0].type === 'movie') {
+            type = 'movie';
             imdb = res[0].movie.ids.imdb;
             tmdb = res[0].movie.ids.tmdb;
 
@@ -278,10 +271,15 @@ Images.get = function(id, type) {
                 getOmdb(id, type),
                 getTmdb(id)
             ]).then(function(obj) {
-                //console.log('format:', obj); // DEBUG
                 return format(obj);
             });
         } else {
+            if (res[0] && res[0].type) {
+                type = res[0].type;
+            } else {
+                type = 'show';
+            }
+
             imdb = res[0].show.ids.imdb;
             tvdb = res[0].show.ids.tvdb;
 
@@ -290,7 +288,6 @@ Images.get = function(id, type) {
                 getOmdb(imdb, type),
                 getTvdb(tvdb)
             ]).then(function(obj) {
-                //console.log('format:', obj); // DEBUG
                 return format(obj);
             });
         }

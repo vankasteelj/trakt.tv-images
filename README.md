@@ -22,40 +22,30 @@ NOTICE: requires trakt.tv module! Load this plugin directly through `trakt.tv` m
         client_id: <trakt client id>,
         client_secret: <trakt client secret>,
         plugins: ['images'],
-        fanartApiKey: <fanart api key>,     // optionnal
-        tvdbApiKey: <tvdb api key>,         // optionnal
-        tmdbApiKey: <tmdb api key>          // optionnal
+        options: {
+            images: {
+                fanartApiKey: <fanart api key>,     // optionnal
+                tvdbApiKey: <tvdb api key>,         // optionnal
+                tmdbApiKey: <tmdb api key>,         // optionnal
+                smallerImages: true                 // reduce image size, save brandwidth. defaults to false.
+            }
+        }
     }, true);
-});
 ```
 
 ### Log in with trakt.tv, then call "images":
 ```js
-// Movie: terminator genesys
-trakt.images.get('tt1340138')
-    .then(console.log.bind(console))
-    .catch(console.log.bind(console));
-
-// Show: Game of Thrones
-trakt.images.get('121361')
-    .then(console.log.bind(console))
-    .catch(console.log.bind(console));
-
-trakt.images.get('tt0944947')
-    .then(console.log.bind(console))
-    .catch(console.log.bind(console));
-
-// Episode: Game of Thrones, s01e01
-trakt.images.get('3254641')
-    .then(console.log.bind(console))
-    .catch(console.log.bind(console));
-
-trakt.images.get('tt1480055')
-    .then(console.log.bind(console))
-    .catch(console.log.bind(console));
+trakt.images.get({
+    tmdb: <a tmdb id>,      // optionnal, recommended
+    imdb: <an imdb id>,     // starts with 'tt' prefix, recommended
+    tvdb: <a tvdb id>,      // optionnal, recommended
+    type: 'movie'           // can be 'movie', 'show' or 'episode'
+})
+.then(console.log.bind(console))
+.catch(console.log.bind(console));
 ```
 
-Note: call is `trakt.images.get(id)` where `id` is from **imdb** (with mandatory 'tt' prefix!) or **tvdb**.
+Note: the object argument used can be a raw object from trakt api too, like `{title:'something', ids:{imdb:'tt000'}}`
 
 ### Example response
 ```js

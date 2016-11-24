@@ -10,27 +10,27 @@ NOTICE: requires trakt.tv module! Load this plugin directly through `trakt.tv` m
 
 ### Install:
 
-```
-    npm install trakt.tv trakt.tv-images
+```bash
+npm install trakt.tv trakt.tv-images --save
 ```
 
 ### Load the plugin:
 
 ```js
-    Trakt = require('trakt.tv');
-    trakt = new Trakt({
-        client_id: <trakt client id>,
-        client_secret: <trakt client secret>,
-        plugins: ['images'],
-        options: {
-            images: {
-                fanartApiKey: <fanart api key>,     // optionnal
-                tvdbApiKey: <tvdb api key>,         // optionnal
-                tmdbApiKey: <tmdb api key>,         // optionnal
-                smallerImages: true                 // reduce image size, save brandwidth. defaults to false.
-            }
+Trakt = require('trakt.tv');
+trakt = new Trakt({
+    client_id: <trakt client id>,
+    client_secret: <trakt client secret>,
+    plugins: ['images'],
+    options: {
+        images: {
+            fanartApiKey: <fanart api key>,     // optionnal
+            tvdbApiKey: <tvdb api key>,         // optionnal
+            tmdbApiKey: <tmdb api key>,         // optionnal
+            smallerImages: true                 // reduce image size, save brandwidth. defaults to false.
         }
-    }, true);
+    }
+}, true);
 ```
 
 ### Log in with trakt.tv, then call "images":
@@ -41,8 +41,8 @@ trakt.images.get({
     tvdb: <a tvdb id>,      // optionnal, recommended
     type: 'movie'           // can be 'movie', 'show' or 'episode'
 })
-.then(console.log.bind(console))
-.catch(console.log.bind(console));
+.then(console.log)
+.catch(console.log);
 ```
 
 Note: the object argument used can be a raw object from trakt api too, like `{title:'something', ids:{imdb:'tt000'}}`

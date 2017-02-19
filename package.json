@@ -25,6 +25,7 @@
     "dependencies": {
         "omdbapi": "1.x.x",
         "fanart.tv": "1.x.x",
-        "got": "5.x.x"
+        "got": "5.x.x",
+        "trakt.tv": "5.x.x"
     }
 }

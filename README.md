@@ -21,7 +21,9 @@ Trakt = require('trakt.tv');
 trakt = new Trakt({
     client_id: <trakt client id>,
     client_secret: <trakt client secret>,
-    plugins: ['images'],
+    plugins: {
+        images: require('trakt.tv-images')
+    },
     options: {
         images: {
             fanartApiKey: <fanart api key>,     // optionnal

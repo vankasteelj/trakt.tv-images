@@ -23,9 +23,9 @@
         "url": "https://github.com/vankasteelj/trakt.tv-images/issues"
     },
     "dependencies": {
-        "omdbapi": "1.x.x",
-        "fanart.tv": "1.x.x",
-        "got": "6.x.x",
+        "omdbapi": "2.x.x",
+        "fanart.tv": "2.x.x",
+        "got": "7.x.x",
         "trakt.tv": "5.x.x"
     }
 }

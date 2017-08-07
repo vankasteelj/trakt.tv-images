@@ -21,9 +21,9 @@ Images.init = function(trakt, opts) {
                 'content-type': 'application/json'
             },
             method: 'POST',
-            body: JSON.stringify({
+            body: {
                 apikey: opts.tvdbApiKey
-            })
+            }
         }).then(function(res) {
             if (res.body && res.body.token) {
                 TvdbApiKey = res.body.token;

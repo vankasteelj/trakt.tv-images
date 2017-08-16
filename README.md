@@ -29,7 +29,7 @@ trakt = new Trakt({
             fanartApiKey: <fanart api key>,     // optionnal
             tvdbApiKey: <tvdb api key>,         // optionnal
             tmdbApiKey: <tmdb api key>,         // optionnal
-            smallerImages: true                 // reduce image size, save brandwidth. defaults to false.
+            smallerImages: true                 // reduce image size, save bandwidth. defaults to false.
         }
     }
 }, true);
@@ -38,9 +38,9 @@ trakt = new Trakt({
 ### Log in with trakt.tv, then call "images":
 ```js
 trakt.images.get({
-    tmdb: <a tmdb id>,      // optionnal, recommended
+    tmdb: <a tmdb id>,      // optional, recommended
     imdb: <an imdb id>,     // starts with 'tt' prefix, recommended
-    tvdb: <a tvdb id>,      // optionnal, recommended
+    tvdb: <a tvdb id>,      // optional, recommended
     type: 'movie'           // can be 'movie', 'show' or 'episode'
 })
 .then(console.log)

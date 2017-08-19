@@ -26,9 +26,9 @@ trakt = new Trakt({
     },
     options: {
         images: {
-            fanartApiKey: <fanart api key>,     // optionnal
-            tvdbApiKey: <tvdb api key>,         // optionnal
-            tmdbApiKey: <tmdb api key>,         // optionnal
+            fanartApiKey: <fanart api key>,     // optional
+            tvdbApiKey: <tvdb api key>,         // optional
+            tmdbApiKey: <tmdb api key>,         // optional
             smallerImages: true                 // reduce image size, save bandwidth. defaults to false.
         }
     }

@@ -58,6 +58,10 @@ var format = function(res) {
         url: null
     };
 
+    var profile = {
+        url: null
+    };
+
     var map = {
         fanart: 3,
         omdb: 1,
@@ -77,16 +81,22 @@ var format = function(res) {
             poster.priority = priority;
             poster.url = img.poster;
         }
+
+        if (img && img.profile) {
+            profile.url = img.profile;
+        }
     }
 
     if (Small) {
         background.url = reduce(background.url);
         poster.url = reduce(poster.url);
+        profile.url = reduce(profile.url);
     }
 
     return {
         background: background.url,
-        poster: poster.url
+        poster: poster.url,
+        profile: profile.url
     };
 };
 
@@ -219,8 +229,8 @@ var getTmdb = function(id,type) {
     
                 var built = null, bg = null, pos = null;
                 if (res.body) {
-                    if (res.body.profile && res.body.profile[0]) {
-                        bg = url + bsize + res.body.profile[0].file_path;
+                    if (res.body.profiles && res.body.profiles[0]) {
+                        bg = url + bsize + res.body.profiles[0].file_path;
                     }
                     if (bg || pos) {
                         built = {
@@ -318,7 +328,21 @@ var parseItem = function (input) {
             if (i.indexOf('tvdb') !== -1) output.tvdb = input[i];
             if (i.indexOf('tmdb') !== -1) output.tmdb = input[i];
             if (i.indexOf('type') !== -1 && input[i]) {
-                output.type = input[i].indexOf('movie') !== -1 ? 'movie' : 'show';
+                switch (input[i]) {
+                    case "movie":
+                        output.type=input[i];
+                        break;
+                    case "show":
+                        output.type=input[i];
+                        break;
+                    case "person":
+                        output.type=input[i];
+                        break;
+                
+                    default:
+                        output.type="show";
+                        break;
+                }
             }
             if (!output.imdb && !output.tvdb && !output.tvdb) {
                 if (i === 'id' && input[i]) {
@@ -369,7 +393,6 @@ var notFound = function () {
 
 Images.get = function(input) {
     var item = parseItem(input);
-
     if (item.type && (item.imdb || item.tvdb || item.tmdb)) {
         if (item.type === 'movie') {
             return getMovie(item);

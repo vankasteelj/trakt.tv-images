@@ -1,11 +1,11 @@
 {
     "name": "trakt.tv-images",
     "version": "5.1.1",
-    "description": "Forked! Plugin to get images from movies, persons, shows and episodes, extends trakt.tv module",
+    "description": "Plugin to get images, extends trakt.tv module",
     "main": "index.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/JimTim/trakt.tv-images"
+        "url": "https://github.com/vankasteelj/trakt.tv-images"
     },
     "keywords": [
         "trakt.tv",
@@ -16,11 +16,11 @@
         "images"
     ],
     "contributors": {
-        "name": "jimtim"
+        "name": "vankasteelj"
     },
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/JimTim/trakt.tv-images/issues"
+        "url": "https://github.com/vankasteelj/trakt.tv-images/issues"
     },
     "dependencies": {
         "omdbapi": "2.x.x",

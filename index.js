@@ -173,7 +173,7 @@ var getOmdb = function(id, type) {
     });
 };
 
-var getTmdb = function(id) {
+var getTmdb = function(id,type) {
     return new Promise(function(resolve) {
         if (!TmdbApiKey || !id) {
             return resolve({
@@ -183,32 +183,53 @@ var getTmdb = function(id) {
         }
 
         // ditry tmdb v3 calls, because all 3rd party modules are (rightfully) bloated
-        return got('https://api.themoviedb.org/3/movie/' + id + '/images?api_key=' + TmdbApiKey, {
+        return got('https://api.themoviedb.org/3/'+type+'/' + id + '/images?api_key=' + TmdbApiKey, {
             json: true,
             headers: {
                 'content-type': 'application/json'
             },
             timeout: 1000
         }).then(function(res) {
-            var url = 'https://image.tmdb.org/t/p/';
-            var bsize = 'original'; // or w1280
-            var psize = 'w780'; // or w780
-
-            var built = null, bg = null, pos = null;
-            if (res.body) {
-                if (res.body.backdrops && res.body.backdrops[0]) {
-                    bg = url + bsize + res.body.backdrops[0].file_path;
+            if (type==='movie')
+            {
+                var url = 'https://image.tmdb.org/t/p/';
+                var bsize = 'original'; // or w1280
+                var psize = 'w780'; // or w780
+    
+                var built = null, bg = null, pos = null;
+                if (res.body) {
+                    if (res.body.backdrops && res.body.backdrops[0]) {
+                        bg = url + bsize + res.body.backdrops[0].file_path;
+                    }
+                    if (res.body.posters && res.body.posters[0]) {
+                        pos = url + psize + res.body.posters[0].file_path;
+                    }
+                    if (bg || pos) {
+                        built = {
+                            background: bg,
+                            poster: pos
+                        };
+                    }
                 }
-                if (res.body.posters && res.body.posters[0]) {
-                    pos = url + psize + res.body.posters[0].file_path;
-                }
-                if (bg || pos) {
-                    built = {
-                        background: bg,
-                        poster: pos
-                    };
+            } else if (type==="person")
+            {
+                var url = 'https://image.tmdb.org/t/p/';
+                var bsize = 'original'; // or w1280
+                var psize = 'w780'; // or w780
+    
+                var built = null, bg = null, pos = null;
+                if (res.body) {
+                    if (res.body.profile && res.body.profile[0]) {
+                        bg = url + bsize + res.body.profile[0].file_path;
+                    }
+                    if (bg || pos) {
+                        built = {
+                            profile: bg
+                        };
+                    }
                 }
             }
+            
 
             return resolve({
                 source: 'tmdb',
@@ -313,7 +334,15 @@ var getMovie = function (item) {
     return Promise.all([
         getFanart(item.imdb, item.type),
         getOmdb(item.imdb, item.type),
-        getTmdb(item.tmdb)
+        getTmdb(item.tmdb,item.type)
+    ]).then(function(obj) {
+        return format(obj);
+    });
+};
+
+var getPerson = function (item) {
+    return Promise.all([
+        getTmdb(item.tmdb,item.type)
     ]).then(function(obj) {
         return format(obj);
     });
@@ -344,6 +373,8 @@ Images.get = function(input) {
     if (item.type && (item.imdb || item.tvdb || item.tmdb)) {
         if (item.type === 'movie') {
             return getMovie(item);
+        } else if (item.type ==='person'){
+            return getPerson(item);
         } else {
             return getShow(item);
         }
@@ -369,6 +400,11 @@ Images.get = function(input) {
                     imdb: res[0].movie.ids.imdb,
                     tmdb: res[0].movie.ids.tmdb,
                     type: 'movie'
+                });
+            } else if (res[0] && res[0].type === 'person') {
+                return getPerson({
+                    tmdb: res[0].movie.ids.tmdb,
+                    type: 'person'
                 });
             } else {
                 return getShow({

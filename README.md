@@ -1,3 +1,5 @@
+# FORKED from https://github.com/vankasteelj/trakt.tv-images
+
 # Trakt.tv Images
 Extends https://github.com/vankasteelj/trakt.tv node module, in order to get images for a given episode/show/movie.
 Image sources:

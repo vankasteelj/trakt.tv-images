@@ -41,7 +41,7 @@ trakt.images.get({
     tmdb: <a tmdb id>,      // optional, recommended
     imdb: <an imdb id>,     // starts with 'tt' prefix, recommended
     tvdb: <a tvdb id>,      // optional, recommended
-    type: 'movie'           // can be 'movie', 'show' or 'episode'
+    type: 'movie'           // can be 'movie', 'show' or 'episode', person
 })
 .then(console.log)
 .catch(console.log);

@@ -197,6 +197,10 @@ var getTmdb = function (id, type) {
             return resolve({source: 'tmdb', img: null});
         }
 
+        if (!type) {
+            type = 'movie';
+        }
+
         // ditry tmdb v3 calls, because all 3rd party modules are (rightfully) bloated
         return got('https://api.themoviedb.org/3/' + type + '/' + id + '/images?api_key=' + TmdbApiKey, {
             json: true,

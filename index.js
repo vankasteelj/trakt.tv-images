@@ -7,15 +7,16 @@ var Fanart = false;
 var TmdbApiKey = false;
 var TvdbApiKey = false;
 var Small = false;
+var Cached = false;
 
 // Initialize the module
 Images.init = function (trakt, opts) {
     Trakt = trakt;
-    if (opts.smallerImages) 
+    if (opts.smallerImages)
         Small = true;
-    if (opts.fanartApiKey) 
+    if (opts.fanartApiKey)
         Fanart = new fanart(opts.fanartApiKey);
-    if (opts.tmdbApiKey) 
+    if (opts.tmdbApiKey)
         TmdbApiKey = opts.tmdbApiKey;
     if (opts.tvdbApiKey) {
         got('https://api.thetvdb.com/login', {
@@ -35,6 +36,8 @@ Images.init = function (trakt, opts) {
             })
             .catch(function (err) {});
     };
+    if(opts.cached)
+      Cached = true;
 };
 
 var reduce = function (link) {
@@ -317,11 +320,11 @@ var parseItem = function (input) {
     if (input.ids) {
         if (input.ids.imdb !== undefined && (input.ids.tmdb !== undefined || input.ids.tvdb !== undefined)) {
             for (var i in input.ids) {
-                if (i.indexOf('imdb') !== -1) 
+                if (i.indexOf('imdb') !== -1)
                     output.imdb = input.ids[i];
-                if (i.indexOf('tvdb') !== -1) 
+                if (i.indexOf('tvdb') !== -1)
                     output.tvdb = input.ids[i];
-                if (i.indexOf('tmdb') !== -1) 
+                if (i.indexOf('tmdb') !== -1)
                     output.tmdb = input.ids[i];
                 }
             }
@@ -329,11 +332,11 @@ var parseItem = function (input) {
 
     for (var i in input) {
         if (input[i]) {
-            if (i.indexOf('imdb') !== -1) 
+            if (i.indexOf('imdb') !== -1)
                 output.imdb = input[i];
-            if (i.indexOf('tvdb') !== -1) 
+            if (i.indexOf('tvdb') !== -1)
                 output.tvdb = input[i];
-            if (i.indexOf('tmdb') !== -1) 
+            if (i.indexOf('tmdb') !== -1)
                 output.tmdb = input[i];
             if (i.indexOf('type') !== -1 && input[i]) {
                 switch (input[i]) {
@@ -432,7 +435,9 @@ Images.get = function (input) {
             return notFound();
         }
 
-        return Trakt
+        var TraktInstance = Cached ? Trakt.cached : Trakt;
+
+        return TraktInstance
             .search
             .id({
                 id_type: id_type,

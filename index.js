@@ -401,7 +401,9 @@ var notFound = function () {
     });
 };
 
-Images.get = function (input) {
+//cacheEnabled = false to optionally disable cached requests
+//default is true
+Images.get = function (input, cacheEnabled = true) {
     var item = parseItem(input);
     if (item.type && (item.imdb || item.tvdb || item.tmdb)) {
         if (item.type === 'movie') {
@@ -435,7 +437,7 @@ Images.get = function (input) {
             return notFound();
         }
 
-        var TraktInstance = Cached ? Trakt.cached : Trakt;
+        var TraktInstance = Cached && cacheEnabled ? Trakt.cached : Trakt;
 
         return TraktInstance
             .search

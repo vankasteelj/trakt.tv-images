@@ -30,6 +30,7 @@ trakt = new Trakt({
             tvdbApiKey: <tvdb api key>,         // optional
             tmdbApiKey: <tmdb api key>,         // optional
             smallerImages: true                 // reduce image size, save bandwidth. defaults to false.
+            cached: true                        // requires trakt.tv-cached
         }
     }
 }, true);
@@ -55,6 +56,13 @@ Object {
     background: "http://assets.fanart.tv/fanart/tv/121361/showbackground/game-of-thrones-4fd5fa8ed5e1b.jpg"
     poster: "http://thetvdb.com/banners/posters/121361-1.jpg"
 }
+```
+
+### Combine with trakt.tv-cached
+Usage:
+
+```js
+let images = await trakt.images.get(movie_object, shouldCache); //default is true
 ```
 
 ## License
